@@ -6,6 +6,10 @@
 #include "GameFramework/GameModeBase.h"
 #include "SGameMode.generated.h"
 
+enum class EWaveState : uint8;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActorKilled, AActor*, VictimActor, AActor*, KillerActor, AController*, KillerController); // Killed actor, killer actor
+
 /**
  * 
  */
@@ -15,6 +19,7 @@ class COOPGAME_API ASGameMode : public AGameModeBase
 	GENERATED_BODY()
 	
 protected:
+	FTimerHandle TimerHandle_NextWaveStart;
 
 	FTimerHandle TimerHandle_BotSpawner;
 
@@ -42,9 +47,24 @@ protected:
 	// Set timer for next startwave
 	void PrepareForNextWave();
 
+	void CheckWaveState();
+
+	void CheckAnyPlayerAlive();
+
+	void GameOver();
+
+	void SetWaveState(EWaveState NewState);
+
+	void RestartDeadPlayers();
+
 public:
 	ASGameMode();
 
 	virtual void StartPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	UPROPERTY(BlueprintAssignable, Category = "GameMode")
+	FOnActorKilled OnActorKilled;
 	
 };

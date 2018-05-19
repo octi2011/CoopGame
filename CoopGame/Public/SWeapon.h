@@ -9,6 +9,7 @@
 class USkeletalMeshComponent;
 class UDamageType;
 class UParticleSystem;
+class USoundCue;
 
 // Containts information of a single hit scan weapon line trace
 USTRUCT()
@@ -36,6 +37,9 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	USoundCue* FireSound;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USkeletalMeshComponent* MeshComp;
@@ -83,6 +87,10 @@ protected:
 	/* RMP - Bullets per minute*/
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	float RateOfFire;
+
+	// Bullet spread in degrees
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin=0.0f))
+	float BulletSpread;
 
 	// Derived from RateOfFire
 	float TimeBetweenShots;

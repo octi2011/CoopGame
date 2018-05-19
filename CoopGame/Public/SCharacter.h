@@ -10,6 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class ASWeapon;
 class USHealthComponent;
+class USoundCue;
 
 UCLASS()
 class COOPGAME_API ASCharacter : public ACharacter
@@ -46,6 +47,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	float ZoomedFOV;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	USoundCue* BackMusic;
+
 
 	/* Default FOV set during begin play*/
 	
@@ -67,10 +71,6 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Player")
 	FName WeaponAttachSocketName;
  
-	void StartFire();
-
-	void StopFire();
-
 	UFUNCTION()
 	void OnHealthChanged(USHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
@@ -87,6 +87,10 @@ public:
 
 	virtual FVector GetPawnViewLocation() const override;
 
-	
+	UFUNCTION(BlueprintCallable, Category = "Player")
+	void StartFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+	void StopFire();
 	
 };

@@ -9,6 +9,8 @@
 #include "CoopGame.h"
 #include "SHealthComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -46,6 +48,8 @@ void ASCharacter::BeginPlay()
 	HealthComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
 
 	if (Role == ROLE_Authority) {
+		UGameplayStatics::SpawnSoundAttached(BackMusic, CameraComp);
+
 		// Spawn a default weapon
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -154,6 +158,8 @@ void ASCharacter::OnHealthChanged(USHealthComponent* OwningHealthComp, float Hea
 		GetMovementComponent()->StopMovementImmediately();
 
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		StopFire();
 
 		DetachFromControllerPendingDestroy();
 
